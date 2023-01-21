@@ -12,5 +12,10 @@ pipeline {
                 echo 'mvn Compile and Build'
             }
         }
+        stage('Unit Tests Execution') {
+            steps {
+                echo 'mvn Compile and Build'
+            }
+        }
     }
 }
