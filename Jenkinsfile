@@ -17,5 +17,10 @@ pipeline {
                 echo 'mvn Compile and Build'
             }
         }
+        stage('Static Code analysis with Sonarqube') {
+            steps {
+                echo 'mvn sonar:sonar'
+            }
+        }
     }
 }
