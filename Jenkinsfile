@@ -30,6 +30,7 @@ pipeline {
         stage('Docker build && tag image') {
             steps {
                 sh"""
+                ls -al 
                 docker build -t kojitechstags-register .
                 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 735972722491.dkr.ecr.us-east-1.amazonaws.com
                 docker tag kojitechstags-register:latest 735972722491.dkr.ecr.us-east-1.amazonaws.com/ci-cd-demo-kojitechs-webapp:latest
