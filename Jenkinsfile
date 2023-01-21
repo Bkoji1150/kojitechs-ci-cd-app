@@ -20,7 +20,7 @@ pipeline {
             steps {
                 sh """
                  mvn surefire:test
-                 ls -al
+                 ls -al target
                 """
             }
         }
