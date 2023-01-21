@@ -67,10 +67,10 @@ pipeline {
                   """
               }
               else {
-                sh"""
-                  echo  "llego" + params.ACTION
-                  image release would not be deployed!"
-                  """ 
+                  sh"""
+                    echo  "llego" + params.ACTION
+                    image release would not be deployed!"
+                    """ 
                 }     
             }
         }
