@@ -5,7 +5,7 @@
 
 <div class="jumbotron">
   <h1 align="center">Welcome to kojitechs</h1>
-  <p align="center">Masterclass Series on AWS, Terraform and kubernetes</p>
+  <p align="center">Masterclass Series on AWS, Terraform and kubernetes with prof koji</p>
 </div>
 
 <div class="container">
