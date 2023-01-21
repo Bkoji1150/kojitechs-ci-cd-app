@@ -18,7 +18,10 @@ pipeline {
         }
         stage('Unit Tests Execution') {
             steps {
-                sh 'mvn surefire:test'
+                sh """
+                 mvn surefire:test
+                 ls -al
+                """
             }
         }
         // stage('Static Code analysis with Sonarqube') {
