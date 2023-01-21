@@ -31,11 +31,13 @@ pipeline {
               }
             }
         }
-        // stage('Waiting for quality Gate Result') {
-        //     steps {
-        //         echo 'timeout:3 unit 3 && return says ok esle abort'
-        //     }
-        // }
+        stage('Waiting for quality Gate Result') {
+            steps {
+                timeout(time: 3, unit: 'MINUTES') {
+                  waitForQualityGate abortPipeline: true
+               }
+            }
+        }
         // stage('Docker build && tag image') {
         //     steps {
         //         sh"""
