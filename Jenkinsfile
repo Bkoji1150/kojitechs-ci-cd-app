@@ -53,27 +53,30 @@ pipeline {
                 }
             }  
         } 
-        stage('Docker build && tag image') {
-          sh 'echo "continue"'
+        stage('Release latest image version to ECR') {
             steps {
-              if (params.ACTION == "RELEASE"){
-              script{  
-                  sh"""
-                  aws ecr get-login-password  --region ${params.AWS_REGION} | docker login --username AWS --password-stdin ${params.REPO_URL}
-                  docker tag ${params.REPO_NAME}:latest ${params.REPO_URL}/${params.REPO_NAME}:${tag}
-                  docker push ${params.REPO_URL}/${params.REPO_NAME}:${tag}
-                  docker tag ${params.REPO_URL}/${params.REPO_NAME}:${tag} ${params.REPO_URL}/${params.REPO_NAME}:latest
-                  docker push ${params.REPO_URL}/${params.REPO_NAME}:latest
-                  """
+                sh 'echo "continue"'
+                script{ 
+                  if (params.ACTION == "RELEASE"){
+                    script {
+                        sh """
+                          aws ecr get-login-password  --region ${params.AWS_REGION} | docker login --username AWS --password-stdin ${params.REPO_URL}                 
+                          docker tag ${params.REPO_NAME}:latest ${params.REPO_URL}/${params.REPO_NAME}:${tag}
+                          docker push ${params.REPO_URL}/${params.REPO_NAME}:${tag}
+                          docker tag ${params.REPO_URL}/${params.REPO_NAME}:${tag} ${params.REPO_URL}/${params.REPO_NAME}:latest
+                          docker push ${params.REPO_URL}/${params.REPO_NAME}:latest
+                        """
+                    }
+                    else {
+                        sh"""
+                            echo  "llego" + params.ACTION
+                            image release would not be deployed!"
+                        """ 
+                  } 
               }
-              else {
-                  sh"""
-                    echo  "llego" + params.ACTION
-                    image release would not be deployed!"
-                    """ 
-                }     
-            }
-        }
+          } 
+      }
+    }
     }
     post {
         success {
