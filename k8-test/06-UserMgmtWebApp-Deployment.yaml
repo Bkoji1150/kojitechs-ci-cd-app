@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: usermgmt-webapp
-          image: 735972722491.dkr.ecr.us-east-1.amazonaws.com/ci-cd-demo-kojitechs-webapp:251f55312e
+          image: 735972722491.dkr.ecr.us-east-1.amazonaws.com/ci-cd-demo-kojitechs-webapp:5e65f3edd9
           imagePullPolicy: Always
           ports: 
             - containerPort: 8080           
