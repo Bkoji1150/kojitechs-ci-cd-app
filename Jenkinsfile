@@ -14,13 +14,6 @@ pipeline {
           tag = sh(returnStdout: true, script: "git rev-parse --short=10 HEAD").trim()
     }  
     stages {
-       stage('Build Workspace') {
-            steps {
-              script {
-                workspace.build()
-              }
-            }
-        }
         stage('mvn Compile and Build') {
             steps {
                 sh 'mvn clean install package'
