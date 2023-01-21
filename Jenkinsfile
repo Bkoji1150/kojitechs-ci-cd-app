@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                echo 'git clone is happening'
+                echo 'git clone is happening yes'
             }
         }
          stage('mvn Compile and Build') {
