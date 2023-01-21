@@ -6,20 +6,20 @@ pipeline {
   } 
 
   parameters { 
-      string(name: 'REPO_NAME', description: 'PROVIDER THE NAME OF ECR REPO', defaultValue: 'ci-cd-demo-kojitechs-webapp',  trim: true)
-      string(name: 'REPO_URL', description: 'PROVIDER THE NAME OF DOCKERHUB/ECR URL', defaultValue: '735972722491.dkr.ecr.us-east-1.amazonaws.com',  trim: true)
-      string(name: 'AWS_REGION', description: 'AWS REGION', defaultValue: 'us-east-1')
-      choice(name: 'ACTION', choices: ['RELEASE', 'RELEASE', 'NO'], description: 'Select action, BECAREFUL IF YOU SELECT DESTROY TO PROD')
+          string(name: 'REPO_NAME', description: 'PROVIDER THE NAME OF ECR REPO', defaultValue: 'ci-cd-demo-kojitechs-webapp',  trim: true)
+          string(name: 'REPO_URL', description: 'PROVIDER THE NAME OF DOCKERHUB/ECR URL', defaultValue: '735972722491.dkr.ecr.us-east-1.amazonaws.com',  trim: true)
+          string(name: 'AWS_REGION', description: 'AWS REGION', defaultValue: 'us-east-1')
+          choice(name: 'ACTION', choices: ['RELEASE', 'RELEASE', 'NO'], description: 'Select action, BECAREFUL IF YOU SELECT DESTROY TO PROD')
     } 
   environment {
           tag = sh(returnStdout: true, script: "git rev-parse --short=10 HEAD").trim()
     }  
     stages {
         stage('mvn Compile and Build') {
-            steps {
-                sh"""mvn clean install package &&
-                     mvn surefire:test
-                  """    
+          steps {
+            sh"""mvn clean install package &&
+                  mvn surefire:test
+              """    
             }
         }
         stage('Static Code analysis with Sonarqube') {
@@ -54,14 +54,24 @@ pipeline {
             }  
         } 
         stage('Docker build && tag image') {
+          sh 'echo "continue"'
             steps {
+              if (params.ACTION == "RELEASE"){
+              script{  
+                  sh"""
+                  aws ecr get-login-password  --region ${params.AWS_REGION} | docker login --username AWS --password-stdin ${params.REPO_URL}
+                  docker tag ${params.REPO_NAME}:latest ${params.REPO_URL}/${params.REPO_NAME}:${tag}
+                  docker push ${params.REPO_URL}/${params.REPO_NAME}:${tag}
+                  docker tag ${params.REPO_URL}/${params.REPO_NAME}:${tag} ${params.REPO_URL}/${params.REPO_NAME}:latest
+                  docker push ${params.REPO_URL}/${params.REPO_NAME}:latest
+                  """
+              }
+              else {
                 sh"""
-                aws ecr get-login-password  --region ${params.AWS_REGION} | docker login --username AWS --password-stdin ${params.REPO_URL}
-                docker tag ${params.REPO_NAME}:latest ${params.REPO_URL}/${params.REPO_NAME}:${tag}
-                docker push ${params.REPO_URL}/${params.REPO_NAME}:${tag}
-                docker tag ${params.REPO_URL}/${params.REPO_NAME}:${tag} ${params.REPO_URL}/${params.REPO_NAME}:latest
-                docker push ${params.REPO_URL}/${params.REPO_NAME}:latest
-                """
+                  echo  "llego" + params.ACTION
+                  image release would not be deployed!"
+                  """ 
+                }     
             }
         }
     }
