@@ -9,6 +9,7 @@ pipeline {
       string(name: 'REPO_NAME', description: 'PROVIDER THE NAME OF ECR REPO', defaultValue: 'ci-cd-demo-kojitechs-webapp',  trim: true)
       string(name: 'REPO_URL', description: 'PROVIDER THE NAME OF DOCKERHUB/ECR URL', defaultValue: '735972722491.dkr.ecr.us-east-1.amazonaws.com',  trim: true)
       string(name: 'AWS_REGION', description: 'AWS REGION', defaultValue: 'us-east-1')
+      choice(name: 'ACTION', choices: ['RELEASE', 'RELEASE', 'NO'], description: 'Select action, BECAREFUL IF YOU SELECT DESTROY TO PROD')
     } 
   environment {
           tag = sh(returnStdout: true, script: "git rev-parse --short=10 HEAD").trim()
@@ -16,15 +17,9 @@ pipeline {
     stages {
         stage('mvn Compile and Build') {
             steps {
-                sh 'mvn clean install package'
-            }
-        }
-        stage('Unit Tests Execution') {
-            steps {
-                sh """
-                 mvn surefire:test
-                 ls -al target
-                """
+                sh"""mvn clean install package &&
+                     mvn surefire:test
+                  """    
             }
         }
         stage('Static Code analysis with Sonarqube') {
@@ -41,11 +36,26 @@ pipeline {
                }
             }
         }
+        stage('Docker Build Image') {
+            steps {      
+                sh"""
+                    pwd && ls -al
+                    docker build -t ${params.REPO_NAME} .
+                  """ 
+              }
+        }
+        stage('Confirm your action') {
+                steps {
+                    script {
+                        timeout(time: 5, unit: 'MINUTES') {
+                        def userInput = input(id: 'confirm', message: params.ACTION + '?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Release image version?', name: 'confirm'] ])
+                    }
+                }
+            }  
+        } 
         stage('Docker build && tag image') {
             steps {
                 sh"""
-                pwd && ls -al
-                docker build -t ${params.REPO_NAME} .
                 aws ecr get-login-password  --region ${params.AWS_REGION} | docker login --username AWS --password-stdin ${params.REPO_URL}
                 docker tag ${params.REPO_NAME}:latest ${params.REPO_URL}/${params.REPO_NAME}:${tag}
                 docker push ${params.REPO_URL}/${params.REPO_NAME}:${tag}
