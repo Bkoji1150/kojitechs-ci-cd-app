@@ -24,11 +24,13 @@ pipeline {
                 """
             }
         }
-        // stage('Static Code analysis with Sonarqube') {
-        //     steps {
-        //         echo 'mvn sonar:sonar'
-        //     }
-        // }
+        stage('Static Code analysis with Sonarqube') {
+            steps {
+              withSonarQubeEnv(installationName: 'sonar') {
+                sh 'mvn sonar:sonar'
+              }
+            }
+        }
         // stage('Waiting for quality Gate Result') {
         //     steps {
         //         echo 'timeout:3 unit 3 && return says ok esle abort'
