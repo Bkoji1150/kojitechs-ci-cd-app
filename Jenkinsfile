@@ -14,9 +14,11 @@ pipeline {
           tag = sh(returnStdout: true, script: "git rev-parse --short=10 HEAD").trim()
     }  
     stages {
-        stage('Checkout Code') {
+       stage('Build Workspace') {
             steps {
-              checkout scm
+              script {
+                workspace.build()
+              }
             }
         }
         stage('mvn Compile and Build') {
