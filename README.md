@@ -1,1 +1,7 @@
-# Azure AKS User Management WebApp Demo
+# Kojitechs User Management WebApp Demo
+
+## Login Info:
+```sh
+username: kojitechs
+password: password101
+```
