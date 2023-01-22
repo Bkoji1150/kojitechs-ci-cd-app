@@ -1,7 +1,7 @@
 
 <nav role="navigation" class="navbar navbar-inverse">
 	<div class="">
-		<a href="https://docs.google.com/spreadsheets/d/1UMrssVX3QBRBUZ99w7JsMarDhkXw-_LDDv-ORrV8GXE/edit#gid=0" class="navbar-brand">Kojitechs</a>
+		<a href="https://docs.google.com/spreadsheets/d/1UMrssVX3QBRBUZ99w7JsMarDhkXw-_LDDv-ORrV8GXE/edit#gid=0" class="navbar-brand">KOJITECHS</a>
 	</div>
 	<div class="navbar-collapse">
 		<ul class="nav navbar-nav">
@@ -21,7 +21,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
   <div class="container-fluid">
       <div class="footer-copyright text-center py-3" style="color:white;" >� Copyright 2023:
-    <a href="https://courses.stacksimplify.com/" style="color:white;" >Kojitechs</a>
+    <a href="#" style="color:white;" >kojitechs.com</a>
   </div>
   
 
