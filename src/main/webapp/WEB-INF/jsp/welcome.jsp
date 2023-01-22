@@ -4,10 +4,8 @@
 </div>
 
 <div class="jumbotron">
-  <h1 align="center">Welcome to Kojitechs</h1>
-  <p align="center">Learn Terraform, Python, Kubernetes</p>
-  <p align="center">with prof Koji</p>
-
+  <h1 align="center">Welcome to kojitechs</h1>
+  <p align="center">Masterclass Series on AWS, Terraform and kubernetes with prof koji</p>
 </div>
 
 <div class="container">
