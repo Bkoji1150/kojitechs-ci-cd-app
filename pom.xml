@@ -12,8 +12,8 @@
 	<groupId>com.stacksimplify.restservices</groupId>
 	<artifactId>usermgmt-webapp</artifactId>
 	<version>1.0.0-MySQLDB</version>	
-	<name>kojitechs-registration-app</name>
-	<description>Kojitechs Web Application</description>
+	<name>kube-usermgmt-webapp</name>
+	<description>Spring Boot Web Application</description>
 
 	<properties>
 		<java.version>1.8</java.version>
