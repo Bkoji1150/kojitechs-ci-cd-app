@@ -4,7 +4,7 @@
 </div>
 
 <div class="jumbotron">
-  <h1 align="center">Kubernetes to Kojitechs</h1>
+  <h1 align="center">Kubernetes on Cloud</h1>
   <p align="center">Masterclass Series on AWS, Azure and GKE</p>
 </div>
 

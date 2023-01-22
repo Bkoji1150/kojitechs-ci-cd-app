@@ -1,8 +1,1 @@
-# kojitechs containerized pipeline
-
-
-# make changes: 
-```
-/src/main/webapp/WEB-INF/jsp/welcome.jsp
-yes 
-```
+# Azure AKS User Management WebApp Demo
