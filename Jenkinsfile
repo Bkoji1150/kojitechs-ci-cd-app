@@ -75,8 +75,8 @@ pipeline {
                             groupId: pom.groupId, 
                             nexusUrl: NEXUS_URL, 
                             nexusVersion: NEXUS_VERSION, 
-                            protocol:  nexusRepo, 
-                            repository: NEXUS_REPOSITORY,
+                            protocol: NEXUS_PROTOCOL, 
+                            repository: nexusRepo,
                             version: pom.version
                     }else {
                         error "*** File: ${artifactPath}, could not be found";
