@@ -97,7 +97,7 @@ pipeline {
                             teamDomain: 'slack', tokenCredentialId: 'slack-token'
                     }   else {
                             echo "Job '${currentBuild.fullDisplayName}' failed..."
-                        } 
+                    } 
                 }
             }
             aborted {
