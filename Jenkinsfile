@@ -23,16 +23,18 @@ pipeline {
         }
         stage('Static Code analysis with Sonarqube') {
             steps {
-              withSonarQubeEnv(installationName: 'sonar') {
-                sh 'mvn sonar:sonar'
+            script{    
+                withSonarQubeEnv(installationName: 'sonar') {
+                    sh 'mvn sonar:sonar'
+                }   
                 timeout(time: 1, unit: 'HOURS') {
                     def sonarScanResults = waitForQualityGate()
                     if (sonarScanResults.status != 'OK') {
                         error "Pipeline aborted due to quality gate failure: ${sonarScanResults.status}"
                     }
                 }
-              }
             }
+        }
         }
         stage('Docker Build Image') {
             steps {      
