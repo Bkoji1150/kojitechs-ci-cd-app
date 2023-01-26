@@ -9,16 +9,20 @@ pipeline {
         string(name: 'REPO_URL', description: 'PROVIDER THE NAME OF DOCKERHUB/ECR URL', defaultValue: '735972722491.dkr.ecr.us-east-1.amazonaws.com',  trim: true)
         string(name: 'AWS_REGION', description: 'AWS REGION', defaultValue: 'us-east-1')
         string(name: 'Nexus_Sever', description: 'Provide server endpoint of nexus', defaultValue: '44.211.144.210:8081')
+        string(name: 'NEXUS_CREDENTIAL_ID', description: 'Provide Nexus credential id', defaultValue: 'Nexus-login')
+        string(name: 'NEXUS_REPOSITORY', description: 'Provide Nexus repo name', defaultValue: 'kojitechs-app-release')
+        string(name: 'NEXUS_SNAPSHOT_REPO', description: 'Provide Nexus snapshot name', defaultValue: 'kojitechs-app-snapshot')
         choice(name: 'ACTION', choices: ['RELEASE', 'RELEASE', 'NO'], description: 'Select action CAREFULLY') 
+
     } 
     environment {
         tag = sh(returnStdout: true, script: "git rev-parse --short=10 HEAD").trim()
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
         NEXUS_URL = "${params.Nexus_Sever}"
-        NEXUS_REPOSITORY = "kojitechs-app-release"
-        NEXUS_SNAPSHOT_REPO = "kojitechs-app-snapshot"
-        NEXUS_CREDENTIAL_ID = "Nexus-login"
+        NEXUS_REPOSITORY = "${param.NEXUS_REPOSITORY}"
+        NEXUS_SNAPSHOT_REPO = "${param.NEXUS_SNAPSHOT_REPO}"
+        NEXUS_CREDENTIAL_ID = "${param.NEXUS_CREDENTIAL_ID}"
     }
         stages {
             stage('mvn Compile and Build') {
