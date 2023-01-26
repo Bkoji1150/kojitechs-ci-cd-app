@@ -78,10 +78,10 @@ pipeline {
                             protocol:  nexusRepo, 
                             repository: NEXUS_REPOSITORY,
                             version: pom.version
-                    }
-                    else {
+                    }else {
                         error "*** File: ${artifactPath}, could not be found";
-                    }
+                    }    
+                }
             }    
         }
         stage('Confirm your action') {
