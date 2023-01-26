@@ -20,9 +20,9 @@ pipeline {
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
         NEXUS_URL = "${params.Nexus_Sever}"
-        NEXUS_REPOSITORY = "${param.NEXUS_REPOSITORY}"
-        NEXUS_SNAPSHOT_REPO = "${param.NEXUS_SNAPSHOT_REPO}"
-        NEXUS_CREDENTIAL_ID = "${param.NEXUS_CREDENTIAL_ID}"
+        NEXUS_REPOSITORY = "${params.NEXUS_REPOSITORY}"
+        NEXUS_SNAPSHOT_REPO = "${params.NEXUS_SNAPSHOT_REPO}"
+        NEXUS_CREDENTIAL_ID = "${params.NEXUS_CREDENTIAL_ID}"
     }
         stages {
             stage('mvn Compile and Build') {
