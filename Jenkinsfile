@@ -16,9 +16,9 @@ pipeline {
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
         NEXUS_URL = "${params.Nexus_Sever}"
-        NEXUS_REPOSITORY = 'kojitechs-app-release'
-        NEXUS_SNAPSHOT_REPO = 'kojitechs-app-snapshot'
-        NEXUS_CREDENTIAL_ID = 'Nexus-login'
+        NEXUS_REPOSITORY = "kojitechs-app-release"
+        NEXUS_SNAPSHOT_REPO = "kojitechs-app-snapshot"
+        NEXUS_CREDENTIAL_ID = "Nexus-login"
     }
     stages {
         stage('mvn Compile and Build') {
@@ -54,26 +54,34 @@ pipeline {
         stage('Docker Build Image') {
             steps {      
                  script {
-                    def readPomVersion = readMavenPom file: 'pom.xml'
+                    def pom = readMavenPom file: 'pom.xml'
 
-                    def nexusRepo = readPomVersion.version.endsWith("SNAPSHOT") ? NEXUS_SNAPSHOT_REPO : NEXUS_REPOSITORY
-                    nexusArtifactUploader artifacts: 
-                    [
+                    def nexusRepo = pom.version.endsWith("SNAPSHOT") ? NEXUS_SNAPSHOT_REPO : NEXUS_REPOSITORY
+                    filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
+                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+                    artifactPath = filesByGlob[0].path;
+                    artifactExists = fileExists artifactPath;
+                    if(artifactExists) {
+                        nexusArtifactUploader artifacts: 
                         [
-                            artifactId: 'usermgmt-webapp', 
-                            classifier: '', 
-                            file: 'target/usermgmt-webapp.war', 
-                            type: 'war'
-                        ]
-                    ], 
-                        credentialsId: 'Nexus-login', 
-                        groupId: "${readPomVersion.groupId}", 
-                        nexusUrl: "${params.Nexus_Sever}", 
-                        nexusVersion: NEXUS_VERSION, 
-                        protocol:  nexusRepo, 
-                        repository: NEXUS_REPOSITORY,
-                        version: "${readPomVersion.version}"
-                }
+                            [
+                                artifactId: pom.artifactId,
+                                classifier: '', 
+                                file: artifactPath, 
+                                type: pom.packaging
+                            ]
+                        ], 
+                            credentialsId: NEXUS_CREDENTIAL_ID, 
+                            groupId: pom.groupId, 
+                            nexusUrl: NEXUS_URL, 
+                            nexusVersion: NEXUS_VERSION, 
+                            protocol:  nexusRepo, 
+                            repository: NEXUS_REPOSITORY,
+                            version: pom.version
+                    }
+                    else {
+                        error "*** File: ${artifactPath}, could not be found";
+                    }
             }    
         }
         stage('Confirm your action') {
