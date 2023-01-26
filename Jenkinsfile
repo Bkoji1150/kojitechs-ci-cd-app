@@ -55,7 +55,7 @@ pipeline {
             steps {      
                  script {
                     def readPomVersion = readMavenPom file: 'pom.xml'
-                    def nexusRepo = readMavenRepo.version.endswith("SNAPSHOT") ? NEXUS_SNAPSHOT_REPO : NEXUS_REPOSITORY
+                    def nexusRepo = readPomVersion.version.endswith("SNAPSHOT") ? NEXUS_SNAPSHOT_REPO : NEXUS_REPOSITORY
                     nexusArtifactUploader artifacts: 
                     [
                         [
@@ -121,15 +121,9 @@ pipeline {
                 teamDomain: 'slack', tokenCredentialId: 'slack-token'
             }
             failure {
-                script {
-                        if (sonarScanResults != null) {
-                            slackSend botUser: true, channel: 'jenkins_notification', color: 'danger',
-                            message: "Build faild${currentBuild.fullDisplayName} failed.\nSonarQube Report: ${sonarScanResults}", 
-                            teamDomain: 'slack', tokenCredentialId: 'slack-token'
-                    }   else {
-                            echo "Job '${currentBuild.fullDisplayName}' failed..."
-                    } 
-                }
+                slackSend botUser: true, channel: 'jenkins_notification', color: 'danger',
+                message: "Build faild${currentBuild.fullDisplayName} failed.\nSonarQube Report: ${sonarScanResults.status}", 
+                teamDomain: 'slack', tokenCredentialId: 'slack-token'
             }
             aborted {
                 slackSend botUser: true, channel: 'jenkins_notification', color: 'hex',
