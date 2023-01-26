@@ -113,35 +113,44 @@ pipeline {
                                 }
                             }
                         }
-                        else {
-                            sh"""
-                                echo  "llego" + params.ACTION
-                                image release would not be deployed!"
-                            """ 
-                            } 
+                            else {
+                                sh"""
+                                    echo  "llego" + params.ACTION
+                                    image release would not be deployed!"
+                                """ 
+                                } 
+                            }
                         }
                     }
                 }
+            // Notificatio
+    post {
+        success {
+            slackSend botUser: true, channel: 'jenkins_notification', color: 'good',
+            message: " with ${currentBuild.fullDisplayName} completed successfully.\nMore info ${env.BUILD_URL}\nLogin to ${params.ENVIRONMENT} and confirm.", 
+            teamDomain: 'slack', tokenCredentialId: 'slack-token'
+        }
+        failure {
+            slackSend botUser: true, channel: 'jenkins_notification', color: 'danger',
+            message: "Build faild${currentBuild.fullDisplayName} failed.\nSonarQube Report: ${sonarScanResults.status}", 
+            teamDomain: 'slack', tokenCredentialId: 'slack-token'
+        }
+        aborted {
+            slackSend botUser: true, channel: 'jenkins_notification', color: 'hex',
+            message: "Pipeline aborted due to quality gate failure: ${sonarScanResults.status}.\nMore Info ${env.BUILD_URL}", 
+            teamDomain: 'slack', tokenCredentialId: 'slack-token'
+        }
+        cleanup {
+            cleanWs()
+            try {
+                sh """
+                    docker rmi -f $(docker images -aq)
+                """
             }
-            // Notification
-        post {
-            success {
-                slackSend botUser: true, channel: 'jenkins_notification', color: 'good',
-                message: " with ${currentBuild.fullDisplayName} completed successfully.\nMore info ${env.BUILD_URL}\nLogin to ${params.ENVIRONMENT} and confirm.", 
-                teamDomain: 'slack', tokenCredentialId: 'slack-token'
-            }
-            failure {
-                slackSend botUser: true, channel: 'jenkins_notification', color: 'danger',
-                message: "Build faild${currentBuild.fullDisplayName} failed.\nSonarQube Report: ${sonarScanResults.status}", 
-                teamDomain: 'slack', tokenCredentialId: 'slack-token'
-            }
-            aborted {
-                slackSend botUser: true, channel: 'jenkins_notification', color: 'hex',
-                message: "Pipeline aborted due to quality gate failure: ${sonarScanResults.status}.\nMore Info ${env.BUILD_URL}", 
-                teamDomain: 'slack', tokenCredentialId: 'slack-token'
-            }
-            cleanup {
-                cleanWs()
+            catch (Exception e){
+                echo "Unable to remove image: ${e}"
+                sh "An eception occured"
             }
         }
     }
+}
