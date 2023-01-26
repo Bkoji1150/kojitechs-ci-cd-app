@@ -11,7 +11,7 @@
 	<packaging>war</packaging>
 	<groupId>com.kojitechs.restservices</groupId>
 	<artifactId>usermgmt-webapp</artifactId>
-	<version>1.0.2</version>	
+	<version>1.0.2-SNAPSHOT</version>	
 	<name>kube-usermgmt-webapp</name>
 	<description>Spring Boot Web Application</description>
 

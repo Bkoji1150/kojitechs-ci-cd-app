@@ -8,11 +8,18 @@ pipeline {
         string(name: 'REPO_NAME', description: 'PROVIDER THE NAME OF ECR REPO', defaultValue: 'ci-cd-demo-kojitechs-webapp',  trim: true)
         string(name: 'REPO_URL', description: 'PROVIDER THE NAME OF DOCKERHUB/ECR URL', defaultValue: '735972722491.dkr.ecr.us-east-1.amazonaws.com',  trim: true)
         string(name: 'AWS_REGION', description: 'AWS REGION', defaultValue: 'us-east-1')
+        string(name: 'Nexus_Sever', description: 'Provide server endpoint of nexus', defaultValue: '44.211.144.210:8081')
         choice(name: 'ACTION', choices: ['RELEASE', 'RELEASE', 'NO'], description: 'Select action, BECAREFUL IF YOU SELECT DESTROY TO PROD')
     } 
     environment {
         tag = sh(returnStdout: true, script: "git rev-parse --short=10 HEAD").trim()
-    }  
+        NEXUS_VERSION = "nexus3"
+        NEXUS_PROTOCOL = "http"
+        NEXUS_URL = "${params.Nexus_Sever}"
+        NEXUS_REPOSITORY = 'kojitechs-app-release'
+        NEXUS_SNAPSHOT_REPO = 'kojitechs-app-snapshot'
+        NEXUS_CREDENTIAL_ID = 'Nexus-login'
+    }
     stages {
         stage('mvn Compile and Build') {
           steps {
@@ -48,20 +55,22 @@ pipeline {
             steps {      
                  script {
                     def readPomVersion = readMavenPom file: 'pom.xml'
+                    def nexusRepo = readMavenRepo.version.endswith("SNAPSHOT") ? NEXUS_SNAPSHOT_REPO : NEXUS_REPOSITORY
                     nexusArtifactUploader artifacts: 
                     [
                         [
                             artifactId: 'usermgmt-webapp', 
-                            classifier: '', file: 'target/usermgmt-webapp.war', 
+                            classifier: '', 
+                            file: 'target/usermgmt-webapp.war', 
                             type: 'war'
                         ]
                     ], 
                         credentialsId: 'Nexus-login', 
-                        groupId: 'com.kojitechs.restservices', 
-                        nexusUrl: '44.211.144.210:8081', 
-                        nexusVersion: 'nexus3', 
-                        protocol: 'http', repository: 
-                        'kojitechs-app-release',
+                        groupId: "${readPomVersion.groupId}", 
+                        nexusUrl: "${params.Nexus_Sever}", 
+                        nexusVersion: NEXUS_VERSION, 
+                        protocol:  nexusRepo, 
+                        repository: NEXUS_REPOSITORY,
                         version: "${readPomVersion.version}"
                 }
             }    
