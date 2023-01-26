@@ -36,12 +36,32 @@ pipeline {
             }
         }
         }
-        stage('Docker Build Image') {
+        stage('Upload Artifact to Nexus') {
             steps {      
                 sh"""
                     pwd && ls -al
                     docker build -t ${params.REPO_NAME} .
                   """ 
+              }
+        }
+        stage('Docker Build Image') {
+            steps {      
+                 script {
+                    nexusArtifactUploader artifacts: 
+                    [
+                        [
+                            artifactId: 'usermgmt-webapp', 
+                            classifier: '', file: 'target/usermgmt-webapp.war', 
+                            type: 'war'
+                        ]
+                    ], 
+                        credentialsId: 'Nexus-login', 
+                        groupId: 'com.kojitechs.restservices', 
+                        nexusUrl: '44.211.144.210:8081', 
+                        nexusVersion: 'nexus3', 
+                        protocol: 'http', repository: 
+                        'kojitechs-app-release',
+                        version: '1.0.0'
               }
         }
         stage('Confirm your action') {
