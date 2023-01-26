@@ -6,7 +6,7 @@
 <div class="jumbotron">
   <h1 align="center">Welcome to Kojitechs</h1>
   <p align="center">Learn Terraform, Python, Kubernetes</p>
-  <p align="center">with prof Koji</p>
+  <p align="center">with prof Koji and Team</p>
 
 </div>
 
