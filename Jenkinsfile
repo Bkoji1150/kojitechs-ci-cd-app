@@ -55,7 +55,6 @@ pipeline {
             steps {      
                  script {
                     def pom = readMavenPom file: 'pom.xml'
-
                     def nexusRepo = pom.version.endsWith("SNAPSHOT") ? NEXUS_SNAPSHOT_REPO : NEXUS_REPOSITORY
                     filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
                     echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
@@ -96,24 +95,24 @@ pipeline {
         stage('Release latest image version to ECR') {
             steps {
                 sh 'echo "continue"'
-                    script{  
-                        if (params.ACTION == "RELEASE"){
-                            script {
-                                try {
-                                    sh """
-                                        aws ecr get-login-password  --region ${params.AWS_REGION} | docker login --username AWS --password-stdin ${params.REPO_URL}                 
-                                        docker tag ${params.REPO_NAME}:latest ${params.REPO_URL}/${params.REPO_NAME}:${tag}
-                                        docker push ${params.REPO_URL}/${params.REPO_NAME}:${tag}
-                                        docker tag ${params.REPO_URL}/${params.REPO_NAME}:${tag} ${params.REPO_URL}/${params.REPO_NAME}:latest
-                                        docker push ${params.REPO_URL}/${params.REPO_NAME}:latest
-                                    """
-                                } catch (Exception e){
-                                echo "Error occurred: ${e}"
-                                sh "An eception occured"
-                                }
-                          }
-                      }
-                      else {
+                script{  
+                    if (params.ACTION == "RELEASE"){
+                    script {
+                        try {
+                            sh """
+                            aws ecr get-login-password  --region ${params.AWS_REGION} | docker login --username AWS --password-stdin ${params.REPO_URL}                 
+                            docker tag ${params.REPO_NAME}:latest ${params.REPO_URL}/${params.REPO_NAME}:${tag}
+                            docker push ${params.REPO_URL}/${params.REPO_NAME}:${tag}
+                            docker tag ${params.REPO_URL}/${params.REPO_NAME}:${tag} ${params.REPO_URL}/${params.REPO_NAME}:latest
+                            docker push ${params.REPO_URL}/${params.REPO_NAME}:latest
+                            """
+                        } catch (Exception e){
+                            echo "Error occurred: ${e}"
+                            sh "An eception occured"
+                            }
+                        }
+                    }
+                    else {
                         sh"""
                             echo  "llego" + params.ACTION
                             image release would not be deployed!"
