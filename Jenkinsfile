@@ -142,17 +142,6 @@ pipeline {
         }
         cleanup {
             cleanWs()
-            script{  
-                try {
-                    sh """
-                        docker rmi -f $(docker images -aq)
-                    """
-                }
-                catch (Exception e){
-                    echo "Unable to remove image: ${e}"
-                    sh "An eception occured"
-                }
-            }
         }
     }
 }
