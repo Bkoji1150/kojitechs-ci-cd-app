@@ -62,7 +62,8 @@ pipeline {
                         protocol: 'http', repository: 
                         'kojitechs-app-release',
                         version: '1.0.0'
-              }
+                }
+            }    
         }
         stage('Confirm your action') {
                 steps {
