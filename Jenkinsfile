@@ -47,6 +47,7 @@ pipeline {
         stage('Docker Build Image') {
             steps {      
                  script {
+                    def readPomVersion = readMavenPom file: 'pom.xml'
                     nexusArtifactUploader artifacts: 
                     [
                         [
@@ -61,7 +62,7 @@ pipeline {
                         nexusVersion: 'nexus3', 
                         protocol: 'http', repository: 
                         'kojitechs-app-release',
-                        version: '1.0.0'
+                        version: "${readPomVersion.version}"
                 }
             }    
         }
