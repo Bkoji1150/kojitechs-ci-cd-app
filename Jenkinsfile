@@ -16,7 +16,7 @@ pipeline {
 
     } 
     environment {
-        tag = sh(returnStdout: true, script: "git rev-parse --short=10 HEAD").trim()
+        tag = sh(returnStdout: true, script: "git rev-parse --short=15 HEAD").trim()
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
         NEXUS_URL = "${params.Nexus_Sever}"
