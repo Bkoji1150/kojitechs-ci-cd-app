@@ -126,7 +126,6 @@ pipeline {
                         }
                     }
                 }
-            // Notificatio
     post {
         success {
             slackSend botUser: true, channel: 'jenkins_notification', color: 'good',
