@@ -13,7 +13,6 @@ pipeline {
         string(name: 'NEXUS_REPOSITORY', description: 'Provide Nexus repo name', defaultValue: 'kojitechs-app-release')
         string(name: 'NEXUS_SNAPSHOT_REPO', description: 'Provide Nexus snapshot name', defaultValue: 'kojitechs-app-snapshot')
         choice(name: 'ACTION', choices: ['RELEASE', 'RELEASE', 'NO'], description: 'Select action CAREFULLY') 
-
     } 
     environment {
         tag = sh(returnStdout: true, script: "git rev-parse --short=15 HEAD").trim()
