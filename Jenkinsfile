@@ -6,10 +6,10 @@ pipeline {
     } 
     parameters { 
         string(name: 'REPO_NAME', description: 'PROVIDER THE NAME OF ECR REPO', defaultValue: 'ci-cd-demo-kojitechs-webapp',  trim: true)
-        string(name: 'REPO_URL', description: 'PROVIDER THE NAME OF DOCKERHUB/ECR URL', defaultValue: '735972722491.dkr.ecr.us-east-1.amazonaws.com',  trim: true)
+        string(name: 'REPO_URL', description: 'PROVIDER THE NAME OF DOCKERHUB/ECR URL', defaultValue: '181437319056.dkr.ecr.us-east-1.amazonaws.com',  trim: true)
         string(name: 'AWS_REGION', description: 'AWS REGION', defaultValue: 'us-east-1')
-        string(name: 'Nexus_Sever', description: 'Provide server endpoint of nexus', defaultValue: '44.211.144.210:8081')
-        string(name: 'NEXUS_CREDENTIAL_ID', description: 'Provide Nexus credential id', defaultValue: 'Nexus-login')
+        string(name: 'Nexus_Sever', description: 'Provide server endpoint of nexus', defaultValue: 'http://3.88.128.84:8081')
+        string(name: 'NEXUS_CREDENTIAL_ID', description: 'Provide Nexus credential id', defaultValue: 'nexus-login')
         string(name: 'NEXUS_REPOSITORY', description: 'Provide Nexus repo name', defaultValue: 'kojitechs-app-release')
         string(name: 'NEXUS_SNAPSHOT_REPO', description: 'Provide Nexus snapshot name', defaultValue: 'kojitechs-app-snapshot')
         choice(name: 'ACTION', choices: ['RELEASE', 'RELEASE', 'NO'], description: 'Select action CAREFULLY') 
