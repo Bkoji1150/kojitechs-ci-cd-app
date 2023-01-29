@@ -11,7 +11,7 @@
 	<packaging>war</packaging>
 	<groupId>com.kojitechs.restservices</groupId>
 	<artifactId>usermgmt-webapp</artifactId>
-	<version>2.0.0-SNAPSHOT</version>	
+	<version>2.1.0</version>	
 	<name>kojitechs-registration-app</name>
 	<description>This pipeline deploys kojitechs registration Application</description>
 
