@@ -48,14 +48,6 @@ pipeline {
             }
             stage('Upload Artifact to Nexus') {
                 steps {      
-                    sh"""
-                        pwd && ls -al
-                        docker build -t ${params.REPO_NAME} .
-                    """ 
-                }
-            }
-            stage('Docker Build Image') {
-                steps {      
                     script {
                         def pom = readMavenPom file: 'pom.xml'
                         def nexusRepo = pom.version.endsWith("SNAPSHOT") ? NEXUS_SNAPSHOT_REPO : NEXUS_REPOSITORY
@@ -96,6 +88,14 @@ pipeline {
                     }
                 }  
             } 
+            stage('Docker build image') {
+                steps {      
+                    sh"""
+                        pwd && ls -al
+                        docker build -t ${params.REPO_NAME} .
+                    """ 
+                }
+            }
             stage('Release latest image version to ECR') {
                 steps {
                     sh 'echo "continue"'
